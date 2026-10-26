@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Pure TV one-command installer for macOS and Linux.
-#   curl -fsSL https://raw.githubusercontent.com/Vardxn/pure-tv/main/install.sh | bash -s -- <tv-ip>
-#   or, from a clone:  ./install.sh <tv-ip>        undo:  ./install.sh rollback <tv-ip>
+#   curl -fsSL https://raw.githubusercontent.com/Vardxn/pure-tv/main/install.sh | bash
+#   or, from a clone:  ./install.sh [tv-ip]        undo:  ./install.sh rollback [tv-ip]
+# Leave out the IP and the TV is found on the local network.
 # Sets up a private Python environment in ~/.puretv (nothing installed system-wide), then runs
 # tools/puretv.py, which talks to the TV over the network and asks before every optional change.
 set -euo pipefail
@@ -30,10 +31,9 @@ if [ ! -x "$HOME_DIR/venv/bin/python" ]; then
 fi
 "$HOME_DIR/venv/bin/python" -m pip install -q --disable-pip-version-check -r "$SRC/tools/requirements.txt"
 
-if [ $# -eq 0 ]; then
-  read -r -p "Your TV's IP address (Settings > Network & Internet on the TV): " IP </dev/tty
-  set -- install "$IP"
-elif [ "$1" != "install" ] && [ "$1" != "rollback" ] && [ "$1" != "probe" ]; then
-  set -- install "$@"
-fi
+# No IP needed: without one, the installer finds the TV on this network itself.
+case "${1:-}" in
+  install|rollback|probe|find) ;;
+  *) set -- install "$@" ;;
+esac
 exec "$HOME_DIR/venv/bin/python" -I "$SRC/tools/puretv.py" "$@" </dev/tty

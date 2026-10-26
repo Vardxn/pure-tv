@@ -13,8 +13,8 @@ I want to install Pure TV (https://github.com/Vardxn/pure-tv), a clean home scre
 My TV model is: <MODEL> and its IP address is: <IP, or "please find it">.
 
 - Clone https://github.com/Vardxn/pure-tv and read its README before doing anything.
-- If I didn't give the IP, find the TV on my network (ARP table, or a host with port 5555 open) and confirm
-  it with me before connecting.
+- If I didn't give the IP, run `./install.sh find` (Windows: `.\install.ps1 find`), which lists the
+  devices on my network with debugging on, and confirm the TV with me before connecting.
 - Run `./install.sh probe <ip>` (Windows: `.\install.ps1 probe <ip>`) and tell me when the
   "Allow USB debugging?" prompt will appear on the TV so I can accept it. If the stock adb binary is
   blocked ("No route to host" on macOS while ping works), that's fine: the installer uses its own
